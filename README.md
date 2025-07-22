@@ -99,4 +99,6 @@ PRs welcome — especially improvements to:
 ---
 
 Feel free to fork, improve, and share feedback! 🎯
-
+---
+## 📫 Contact
+Always open to connecting — feel free to reach out via [Medium](https://medium.com/@LlewopNomis) or [Medium](https://medium.com/@LlewopNomis).
