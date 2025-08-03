@@ -1,104 +1,108 @@
 # Django Import Export Tools
 
-This utility provides a management command to automatically generate an Excel workbook that acts as an import template for any Django app’s models. The template:
+---
 
-✅ Includes worksheets for each model with their fields as columns
-✅ Automatically explodes ForeignKeys into natural key fields (unique constraints or primary key)
-✅ Defines tables for each worksheet (ListObjects)
-✅ Adds Excel Data Validations for:
-- ForeignKey fields (cross-referencing natural key columns in other sheets)
-- TextChoices and IntegerChoices fields (readable dropdowns using a `Choices` worksheet)
-✅ Generates a `Choices` worksheet showing both keys and human-readable labels
-✅ Ensures all validations are dynamic and adjust with the table as data is added
+A utility for Django developers who need **Excel-based import templates** that are:
+
+- 🧑‍💼 **Human-friendly** — labels, dropdowns, natural keys
+- 🎯 **Model-aware** — understands ForeignKeys, Choices, constraints
+- 🪄 **Zero-config** — no need to define `Resource` classes or custom widgets
+
+While developing this tool, I explored the excellent [`django-import-export`](https://github.com/django-import-export/django-import-export) library. It excels at serializing Django models to and from tabular formats like CSV and Excel. However, when I needed a fully validated **Excel workbook for human data entry**, I found that several critical features weren’t available out of the box, including:
+
+- Auto-expansion of ForeignKey and compound key fields
+- Dropdowns for `TextChoices` and `IntegerChoices` with friendly labels
+- Named ranges and dynamic Excel validations
+- A `Choices` sheet for self-documenting reference
+
+Rather than compete, this project complements `django-import-export` by handling the *front-end data entry side*. I'd be thrilled if this project sparks further development in that direction — or even gets absorbed into more mainstream tools.
 
 ---
 
-## 🔧 Installation
+This utility provides a management command that automatically generates an Excel workbook for any Django app’s models. The logic is modular and can also be used in views or background tasks. The template includes:
 
-Clone this repository into your Django project and place `export_model_spec.py` in your app’s `management/commands` directory.
+✅ A worksheet per model with one column per field  
+✅ ForeignKey fields auto-expanded into their natural key fields (e.g., unique constraints or human-readable PKs)  
+✅ Tables (Excel ListObjects) defined for each worksheet  
+✅ Data validation using:
+- Excel dropdowns for ForeignKeys (referencing other sheets)
+- Dropdowns for `TextChoices`/`IntegerChoices` with friendly labels
 
-```
-<yourapp>/management/commands/export_model_spec.py
-```
-
-Ensure you have `openpyxl` installed:
-
-```
-pip install openpyxl
-```
-
----
-
-## 🚀 Usage
-
-Run the command for your app:
-
-```
-python manage.py export_model_spec <app_label>
-```
-
-The output will be saved to:
-
-```
-<app_label>/media/import_export/templates/<app_label>_import_file.xlsx
-```
+✅ A `Choices` worksheet showing keys and human-readable labels  
+✅ Dynamic named ranges to grow with your data  
+✅ MP_Node support via `parent` field with validated natural key references
 
 ---
 
-## 📝 Example features
+## 🔧 Getting started
 
-- **Human-readable headers:** Clear, wrapped text headers for each column.
-- **Choices dropdowns:** Friendly dropdowns for fields using Django `TextChoices` or `IntegerChoices`, displaying the `label` and resolving to the `key` on import.
-- **ForeignKey validation:** Dropdown validation pointing to the first natural key of the related model (typically a human-readable field).
-- **Dynamic named ranges:** All validations reference named ranges that resize as tables grow.
-- **Choices worksheet:** Self-documenting reference for all choices used in dropdowns.
+- [Installation](#) *(coming soon or link to Medium section)*
+- [Usage Guide](#) *(coming soon or link to Medium section)*
+
+---
+
+## 📝 Features
+
+- **Human-readable headers:** Clear, wrapped text headers
+- **Choices dropdowns:** Friendly dropdowns using Django `Choices` fields (resolves `label → key` on import)
+- **ForeignKey validation:** Dropdown to first natural key of related model (usually a readable code)
+- **Dynamic named ranges:** Excel validations auto-expand as the user adds rows
+- **Choices worksheet:** Self-documenting lookup for all choice-based fields
+- **Compound foreign keys:** Automatically broken into constituent fields, no custom config needed
+- **MP_Node support:** Adds a validated `parent` field so hierarchical trees are preserved
 
 ---
 
 ## 🔔 Use cases
 
-- Populate development or staging databases quickly.
-- Prepare client import templates with proper validations.
-- Reduce human error during initial data load.
-- Provide self-documenting import specifications for clients or teams.
+- Populate dev or staging environments quickly
+- Provide clients with validated import templates
+- Reduce human error when onboarding data
+- Allow non-technical teams to enter relational data in Excel
+- Handle **complex model relationships** — compound keys, hierarchy trees, foreign keys
+- Provide fully self-documenting Excel templates for teams and stakeholders
 
 ---
 
 ## 💡 Notes
 
-- Only managed and non-abstract models are included.
-- Foreign keys targeting models with a unique constraint are resolved by exploding into separate columns.
-- `Choices` worksheet keeps both key and label so your import routine can resolve `label → key` at import time.
-- A corresponding import routine is coming shortly to handle:
-  - Reverse lookup of `label` values to `key` values for choice fields.
-  - Foreign key lookups to resolve natural keys or human-readable identifiers to internal database keys.
-  - Compound foreign key lookups where multiple fields together define a relationship.
+- Only **managed**, **non-abstract** models are included
+- ForeignKeys are resolved into separate columns using natural keys
+- `Choices` worksheet ensures your import routine can reverse map `label → key`
+- A corresponding import utility (in progress) will support:
+  - Resolving choice field labels into values
+  - ForeignKey lookups using natural keys
+  - Compound foreign key resolution
 
 ---
 
 ## 📖 Further reading
 
-For background on why this tool was built and how it works:
-[Read more about this project on Medium](https://medium.com/your-story-url)
+For the full story and walkthrough, see:  
+👉 [How I Built a Django Excel Import Template Generator (Medium)](https://medium.com/@LlewopNomis/how-i-built-a-django-excel-import-template-generator-and-how-you-can-too-68ff6b5e8af5)
 
 ---
 
 ## 🖋️ License
 
-MIT License.
+MIT License
 
 ---
 
 ## ❤️ Contributions
 
-PRs welcome — especially improvements to:
-- Second-level validations (e.g., max length, numeric constraints)
-- Inline documentation/comments
-- Import routines that consume this file structure
+PRs welcome — especially for:
+
+- Additional validations (e.g., length, numeric ranges)
+- Documentation and inline comments
+- Enhanced import routines to match the template format
 
 ---
 
 Feel free to fork, improve, and share feedback! 🎯
+
 ---
+
 ## 📫 Contact
-Always open to connecting — feel free to reach out via [Medium](https://medium.com/@LlewopNomis) or [Twitter/X](https://twitter.com/@LlewopNomis).
+
+Reach out via [Medium](https://medium.com/@LlewopNomis) or [Twitter/X](https://twitter.com/@LlewopNomis)
