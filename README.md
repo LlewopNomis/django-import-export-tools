@@ -36,8 +36,12 @@ This utility provides a management command that automatically generates an Excel
 
 ## 🔧 Getting started
 
-- [Installation](#) *(coming soon or link to Medium section)*
-- [Usage Guide](#) *(coming soon or link to Medium section)*
+**Check out the full post on [Medium](https://medium.com/@LlewopNomis/how-i-built-a-django-excel-import-template-generator-and-how-you-can-too-68ff6b5e8af5)**, which covers:
+
+- 📦 Installation instructions  
+- 📘 Usage walkthrough  
+- 🎯 Why this tool matters  
+- 🚀 Example use cases  
 
 ---
 
